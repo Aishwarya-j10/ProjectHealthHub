@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            {% if action == 'register' %}
+            <form class="login-form">
+                <input type="text" placeholder="name"/>
+                <input type="text" placeholder="username"/>
+                <input type="password" placeholder="password"/>
+                <input type="text" placeholder="email"/>
+                <button>create</button>
+                <p class="message">Already registered? <a href='/login'>Sign In</a></p>
+            </form>
+            {% else %}
+            <form class="login-form">
+                <input type="text" placeholder="username"/>
+                <input type="password" placeholder="password"/>
+                <a href="{{url_for('dashboard')}}" class="txt1">
+                <button>login</button>
+                </a>
+                <p class="message">Not registered? <a href='/register'>Create an account</a></p>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

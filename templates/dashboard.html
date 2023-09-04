@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Health Dashboard</h1>
+    </header>
+    <main>
+        <section class="data-entry">
+            <h2>Enter Your Health Information</h2>
+            <form method="POST" action="/dashboard/health">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" step="0.01" required><br><br>
+
+                <!-- Add more fields for other health metrics as needed -->
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+        
+        <section class="health-data">
+            <h2>Your Health Information</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Weight (kg)</th>
+                        <!-- Add more table headers for other health metrics -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in health_data %}
+                    <tr>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <!-- Add more table cells for other health metrics -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        &copy; 2023 HealthHub
+    </footer>
+</body>
+</html>

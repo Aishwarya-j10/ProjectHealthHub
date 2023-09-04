@@ -1,0 +1,88 @@
+body {
+
+    background-image: url("2.PNG");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: auto;
+    text-align: center;
+    font-family: 'Roboto Slab', serif;
+    
+    }
+    
+    #menu {
+    
+        margin: auto;
+        height: 100px;
+    
+    }
+    
+    ul {
+    
+    word-spacing: 10px;
+    
+    }
+    
+    ul li {
+    
+    display: inline;
+    text-decoration: none;
+    font-family: 'Roboto Slab', serif;
+    color: white;
+    letter-spacing: 5px;
+    background-color: #43A047;
+    padding: 8px;
+    border-radius: 2px;
+    }
+    
+    ul li:hover {
+    
+    background-color:#564256;
+    cursor: pointer;
+    
+    }
+    
+    #slogan {
+    
+    margin:auto;
+    width: 1200px;
+    margin-top:20px;
+    font-size: 60px;
+    color: antiquewhite;
+    
+    
+    }
+    
+    h1 {
+    
+        font-size: 50px;
+    
+    }
+    
+    h3 {
+    
+        font-size: 30px;
+        
+    }
+    
+    button {
+    
+    height:50px;
+    width:130px;
+    background-color:#43A047;
+    color: white;
+    font-size: 12px;
+    font-family: 'Roboto Slab', serif;
+    border-radius: 5px;
+    }
+    
+    button:hover {
+    
+    background-color:#564256;
+    cursor: pointer;
+    
+    }
+    
+    
+    
+    

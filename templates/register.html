@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form method="POST" action="/register">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
         
-
-    </head> 
-    <body>
-        <div class="login-page">
-        <div class="form">
-          <form class="login-form">
-            <input type="text" placeholder="full_name"/>
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
-            <input type="text" placeholder="email"/>
-            <button>Create Account</button>
-            <p class="message">Already registered? <a href="#">Sign In</a></p>
-          </form>
-        </div>
-      </div> 
-      <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
-    </body> 
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number"><br><br>
+        
+        <button type="submit">Register</button>
+    </form>
+    
+    <p>Already have an account? <a href="/">Login</a></p>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li style="color: red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
 </html>

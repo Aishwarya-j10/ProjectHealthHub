@@ -1,54 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Dashboard</title>
+    <title>Dashboard</title>
 </head>
 <body>
-    <header>
-        <h1>Health Dashboard</h1>
-    </header>
-    <main>
-        <section class="data-entry">
-            <h2>Enter Your Health Information</h2>
-            <form method="POST" action="/dashboard/health">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required><br><br>
+    <h1>Welcome to the Dashboard</h1>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <!-- Tab Buttons -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'profile')">My Profile</button>
+        <button class="tablinks" onclick="openTab(event, 'health_data')">Enter Health Data</button>
+    </div>
+    
+    <!-- Profile Tab Content -->
+    <div id="profile" class="tabcontent">
+        <h2>My Profile</h2>
+        <p>User ID: {{ user.id }}</p>
+        <p>Name: {{ user.name }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Phone Number: {{ user.phone_number }}</p>
+    </div>
+    
+    <!-- Health Data Tab Content -->
+    <div id="health_data" class="tabcontent">
+        <h2>Enter Health Data</h2>
+        <form method="POST" action="/add_health_data">
+            <label for="age">AGE:</label>
+            <input type="number" id="age" name="age"><br><br>
 
-                <label for="weight">Weight (kg):</label>
-                <input type="number" id="weight" name="weight" step="0.01" required><br><br>
+            <label for="gender">Gender:</label>
+            <input type="text" id="gender" name="gender"><br><br>
+            
+            <label for="fever">Fever:</label>
+            <input type="checkbox" id="fever" name="fever"><br><br>
+            
+            <label for="heart_rate">Heart Rate:</label>
+            <input type="number" id="heart_rate" name="heart_rate"><br><br>
 
-                <!-- Add more fields for other health metrics as needed -->
+            <label for="acidity">Acidity:</label>
+            <input type="checkbox" id="acidity" name="acidity"><br><br>
 
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-        
-        <section class="health-data">
-            <h2>Your Health Information</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Weight (kg)</th>
-                        <!-- Add more table headers for other health metrics -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in health_data %}
-                    <tr>
-                        <td>{{ entry[1] }}</td>
-                        <td>{{ entry[2] }}</td>
-                        <!-- Add more table cells for other health metrics -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-    </main>
-    <footer>
-        &copy; 2023 HealthHub
-    </footer>
+            <label for="vomiting">Vomiting:</label>
+            <input type="checkbox" id="vomiting" name="vomiting"><br><br>
+
+            <label for="headache">Headache:</label>
+            <input type="checkbox" id="headache" name="headache"><br><br> 
+
+            <label for="breathlessness">Breathlessness:</label>
+            <input type="checkbox" id="breathlessness" name="breathlessness"><br><br> 
+
+            <label for="cough">Cough:</label>
+            <input type="checkbox" id="cough" name="cough"><br><br> 
+
+            <label for="anxiety">Anxiety:</label>
+            <input type="checkbox" id="anxiety" name="anxiety"><br><br>
+            
+            <!-- Add similar fields for other health data attributes -->
+            
+            <button type="submit">Submit Health Data</button>
+        </form>
+    </div>
+    
+    <!-- JavaScript for Tab Switching -->
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </body>
 </html>

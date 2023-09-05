@@ -21,6 +21,15 @@
     <div class="tab">
         <button class="tablinks" onclick="openTab(event, 'profile')">My Profile</button>
         <button class="tablinks" onclick="openTab(event, 'health_data')">Enter Health Data</button>
+        <button class="tablinks" onclick="openTab(event, 'view_data')">View Health Data</button>
+       
+            <!-- ... (your existing tabs) -->
+            <a href="{{ url_for('download_health_data_csv') }}" class="tablinks">Download Health Data (CSV)</a>
+            <a href="{{ url_for('download_entire_health_data_csv') }}" class="tablinks">Download full Health Data (CSV)</a>
+            
+        
+        
+
     </div>
     
     <!-- Profile Tab Content -->
@@ -30,6 +39,26 @@
         <p>Name: {{ user.name }}</p>
         <p>Email: {{ user.email }}</p>
         <p>Phone Number: {{ user.phone_number }}</p>
+    </div> 
+
+    <!-- view_data Tab Content -->
+    <div id="view_data" class="tabcontent">
+        {% for data in health_data %}
+            <tr>
+                <!-- <td>{{ data.timestamp }}</td> -->
+                <td>{{ data.age }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ "Yes" if data.fever else "No" }}</td>
+                <td>{{ data.heart_rate }}</td>
+                <td>{{ "Yes" if data.acidity else "No" }}</td>
+                <td>{{ "Yes" if data.vomiting else "No" }}</td>
+                <td>{{ "Yes" if data.headache else "No" }}</td>
+                <td>{{ "Yes" if data.breathlessness else "No" }}</td>
+                <td>{{ "Yes" if data.cough else "No" }}</td>
+                <td>{{ "Yes" if data.anxiety else "No" }}</td>
+                <!-- Add cells for other health data attributes -->
+            </tr>
+        {% endfor %}
     </div>
     
     <!-- Health Data Tab Content -->
@@ -72,6 +101,10 @@
         </form>
     </div>
     
+    <!-- View Health Data Tab Content -->
+    <div id="view_data" class="tabcontent">
+        {% include 'view_data.html' %}
+    </div>
     <!-- JavaScript for Tab Switching -->
     <script>
         function openTab(evt, tabName) {
@@ -88,5 +121,6 @@
             evt.currentTarget.className += " active";
         }
     </script>
+    
 </body>
 </html>

@@ -1,7 +1,9 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, Response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
+import pandas as pd
+from io import StringIO
 # from flask_migrate import Migrate
 
 from sqlalchemy.sql import func
@@ -104,11 +106,12 @@ def add_health_data():
     if user_id:
         user = User.query.get(user_id)
         if user:
+            print(f'User ID: {user_id}')
             # Retrieve health data attributes from the form
-            age = int(request.form.get('age')) or None
+            age = int(request.form.get('age')) if request.form.get('age') else None
             gender = str(request.form.get('gender')) 
             fever = bool(request.form.get('fever'))
-            heart_rate = int(request.form.get('heart_rate'))
+            heart_rate = int(request.form.get('heart_rate')) if request.form.get('heart_rate') else None
             # heart_rate = request.form.get('heart_rate') or None
             # if heart_rate_str is None:
             #     heart_rate = None
@@ -120,29 +123,10 @@ def add_health_data():
             breathlessness = bool(request.form.get('breathlessness')) 
             cough = bool(request.form.get('cough')) 
             anxiety = bool(request.form.get('anxiety')) 
-            # Add similar lines for other health data attributes
-            # lst = ['age', 'gender', 'fever', 'heart_rate', 'acidity', 'vomiting', 'headache', 'breathlessness', 'cough', 'anxiety'] 
-            # Set default values to None for attributes where no value is provided
-            # if age is None:
-            #     age = None
-            # if gender is None:
-            #     gender = None
-            
-            # if acidity is None:
-            #     acidity = None
-            # if vomiting is None:
-            #     vomiting = None
-            # if headache is None:
-            #     headache = None
-            # if breathlessness is None:
-            #     breathlessness = None
-            # if cough is None:
-            #     cough = None
-            # if anxiety is None:
-            #     anxiety = None
-            # Create a new HealthData record in the database
+
             existing_health_data = HealthData.query.filter_by(user=user).first()
             if existing_health_data : 
+                existing_health_data.user = user.id
                 existing_health_data.age = age
                 existing_health_data.gender = gender
                 existing_health_data.fever = fever
@@ -157,7 +141,7 @@ def add_health_data():
                 db.session.commit()
             else : 
                 new_health_data = HealthData(
-                    user=user,
+                    user=user.id,
                     age = age, 
                     gender = gender, 
                     fever=fever,
@@ -178,6 +162,157 @@ def add_health_data():
     else: 
         flash('You need to log in to submit health data.', 'danger')
         return redirect(url_for('home'))
+    
+# @app.route('/view_data')
+# def view_data():
+#     user_id = session.get('user_id')
+#     if user_id:
+#         user = User.query.get(user_id) 
+#         # user = User.query.filter_by(user_id = user_id).first()
+#         print(user)
+#         if user:
+#             # Fetch the user's health data
+#             health_data = HealthData.query.filter_by(user_id=user_id).all()
+#             print(health_data)
+#             return render_template('view_data.html', user=user, health_data=health_data)
+    
+#     flash('You need to log in to view health data.', 'danger')
+#     return redirect(url_for('home'))
+@app.route('/view_data', methods=['GET'])
+def view_data():
+    print("out of if") 
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            try:
+                # Fetch the user's health data
+                health_data = HealthData.query.filter_by(user_id=user_id).all()
+                print("User:", user)
+                print("Health Data:", health_data)
+                return render_template('view_data.html', user=user, health_data=health_data)
+            except Exception as e:
+                print("Error fetching health data:", str(e))
+                flash('An error occurred while fetching health data.', 'danger')
+                return redirect(url_for('home'))
+
+    
+    flash('You need to log in to view health data.', 'danger')
+    return redirect(url_for('home'))
+
+
+# import os
+# from flask import Flask, render_template, request, redirect, url_for, flash, session, Response
+# import pandas as pd
+
+
+# ... (your existing code)
+
+@app.route('/download_health_data_csv')
+def download_health_data_csv():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            health_data = HealthData.query.filter_by(user_id=user_id).all()
+            if health_data:
+                # Create a list of dictionaries with the selected columns
+                data_list = [
+                    {
+                        "Age": data.age,
+                        "Gender": data.gender,
+                        "Fever": data.fever,
+                        "Heart Rate": data.heart_rate,
+                        "Acidity": data.acidity,
+                        "Vomiting": data.vomiting,
+                        "Headache": data.headache,
+                        "Breathlessness": data.breathlessness,
+                        "Cough": data.cough,
+                        "Anxiety": data.anxiety,
+                    }
+                    for data in health_data
+                ]
+
+                # Create a Pandas DataFrame from the list of dictionaries
+                df = pd.DataFrame(data_list)
+
+                # Create a unique file name
+                file_name = f"user_{user.id}_health_data.csv"
+
+                # Save the DataFrame to a CSV file in memory
+                csv_data = StringIO()
+                df.to_csv(csv_data, index=False)
+
+                # Move the file pointer to the beginning of the file
+                csv_data.seek(0)
+
+                # Create a response with the CSV data
+                response = Response(
+                    csv_data,
+                    content_type="text/csv",
+                    headers={
+                        "Content-Disposition": f"attachment; filename={file_name}"
+                    }
+                )
+                return response
+
+    flash('No health data available for download.', 'danger')
+    return redirect(url_for('dashboard'))
+
+# Add a new route to download the entire health_data table
+@app.route('/download_entire_health_data_csv')
+def download_entire_health_data_csv():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            health_data = HealthData.query.all()  # Retrieve all health data
+            if health_data:
+                # Create a list of dictionaries with all columns
+                data_list = [
+                    {
+                        "User ID": data.user_id,
+                        "Age": data.age,
+                        "Gender": data.gender,
+                        "Fever": data.fever,
+                        "Heart Rate": data.heart_rate,
+                        "Acidity": data.acidity,
+                        "Vomiting": data.vomiting,
+                        "Headache": data.headache,
+                        "Breathlessness": data.breathlessness,
+                        "Cough": data.cough,
+                        "Anxiety": data.anxiety,
+                    }
+                    for data in health_data
+                ]
+
+                # Create a Pandas DataFrame from the list of dictionaries
+                df = pd.DataFrame(data_list)
+
+                # Create a unique file name
+                file_name = "entire_health_data.csv"
+
+                # Save the DataFrame to a CSV file in memory
+                csv_data = StringIO()
+                df.to_csv(csv_data, index=False)
+
+                # Move the file pointer to the beginning of the file
+                csv_data.seek(0)
+
+                # Create a response with the CSV data
+                response = Response(
+                    csv_data,
+                    content_type="text/csv",
+                    headers={
+                        "Content-Disposition": f"attachment; filename={file_name}"
+                    }
+                )
+                return response
+
+    flash('No health data available for download.', 'danger')
+    return redirect(url_for('dashboard'))
+
+
 
 @app.route('/logout')
 def logout():

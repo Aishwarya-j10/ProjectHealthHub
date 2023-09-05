@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Health Data</title>
+</head>
+<body>
+    <h1>View Health Data</h1>
+    <p>User ID: {{ user.id }}</p>
+    <p>Name: {{ user.name }}</p>
+    {% for data in health_data %}
+    <p>Age: {{ data.age }}</p>
+    <!-- Other attributes can be accessed similarly -->
+    {% endfor %}
+    
+    <h2>Health Data</h2>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Fever</th>
+            <th>Heart Rate</th>
+            <th>Acidity</th>
+            <th>Vomiting</th>
+            <th>Headache</th>
+            <th>Breathlessness</th>
+            <th>Cough</th>
+            <th>Anxiety</th>
+            <!-- Add columns for other health data attributes -->
+        </tr>
+        {% for data in health_data %}
+            <tr>
+                <!-- <td>{{ data.timestamp }}</td> -->
+                <td>{{ data.age }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ "Yes" if data.fever else "No" }}</td>
+                <td>{{ data.heart_rate }}</td>
+                <td>{{ "Yes" if data.acidity else "No" }}</td>
+                <td>{{ "Yes" if data.vomiting else "No" }}</td>
+                <td>{{ "Yes" if data.headache else "No" }}</td>
+                <td>{{ "Yes" if data.breathlessness else "No" }}</td>
+                <td>{{ "Yes" if data.cough else "No" }}</td>
+                <td>{{ "Yes" if data.anxiety else "No" }}</td>
+                <!-- Add cells for other health data attributes -->
+            </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Add a back button or link to return to the dashboard -->
+    <!-- <br>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a> -->
+</body>
+</html>

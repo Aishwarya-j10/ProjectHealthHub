@@ -18,9 +18,13 @@
            
         }
         .navbar {
-            background-color: hwb(229 7% 33% / 0.555); 
+            background-color: #5C62D6; 
         }
-    
+        .red-button {
+            background-color: #5C62D6; /* A darker shade of red */
+            border-color: #5C62D6;
+            color: white; /* Text color */
+        }
      
         .register-container {
             max-width: 400px;
@@ -86,7 +90,7 @@
                         <label for="phone_number">Phone Number:</label>
                         <input type="text" class="form-control" id="phone_number" name="phone_number">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <button type="submit" class="btn red-button btn-primary btn-block">Register</button>
                 </form>
                 <p class="mt-3 text-center">Already have an account? <a href="/">Login</a></p>
                 <!-- Flash messages -->

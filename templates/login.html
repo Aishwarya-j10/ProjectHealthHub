@@ -18,17 +18,22 @@
             background-color: #fff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         } 
+        .red-button {
+            background-color: #5C62D6; /* A darker shade of red */
+            border-color: #5C62D6;
+            color: white; /* Text color */
+        }
         
         
             body {
-                /* background-image: url('path/to/your/background-image.jpg'); */
+                /*background-image: url('C:\Users\admin\Downloads\Documents\FinalProject\static\3.png'); */
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                
             }
             .navbar {
-                background-color: hwb(229 7% 33% / 0.555); 
+                background-color: #5C62D6; 
             }
             
     </style>
@@ -56,7 +61,7 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a> <!-- Add your login route here -->
+                        <a class="nav-link"  href="/login" >Login</a> <!-- Add your login route here -->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/register">Register</a> <!-- Add your register route here -->
@@ -69,7 +74,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6 login-container">
                 <h1 class="text-center">HealthHub Login</h1>
-                <img src="https://via.placeholder.com/150" class="img-fluid rounded-circle mx-auto d-block" alt="Healthcare Image">
+                <img src="/static/3.png" class="img-fluid rounded-circle mx-auto d-block" alt="Healthcare Image">
                 <form method="POST" action="/login">
                     <div class="form-group">
                         <label for="email">Email:</label>
@@ -79,7 +84,7 @@
                         <label for="password">Password:</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <button type="submit" class="btn red-button btn-primary btn-block">Login</button>
                 </form>
                 <p class="mt-3 text-center">Don't have an account? <a href="/register">Register</a></p>
                 <!-- Flash messages -->

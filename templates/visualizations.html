@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Hub - Visualizations</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add any necessary CSS or other HTML head content here -->
+    <style>
+        /* Custom CSS for the visualizations page */
+        body {
+            background-color: #f8f9fa; /* Light gray background color */
+            padding: 20px;
+        }
+        .visualization-heading {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tab-content {
+            margin-top: 20px;
+        }
+        .visualization-image {
+            max-width: 100%;
+            display: block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="visualization-heading">Visualizations</h1>
+
+    <!-- Nav tabs with headings -->
+    <ul class="nav nav-tabs" id="visualizationTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Tab 1</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Tab 2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Tab 3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false">Tab 4</a>
+        </li>
+    </ul>
+
+    <!-- Tab content for images -->
+    <div class="tab-content" id="visualizationTabContent">
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+            <img src="/static/plot.png" alt="Health Data Plot" class="visualization-image">
+        </div>
+        <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+            <img src="/static/plot1.png" alt="Health Data Plot" class="visualization-image">
+        </div>
+        <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+            <img src="/static/plot2.png" alt="Health Data Plot" class="visualization-image">
+        </div>
+        <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+            <img src="/static/plot3.png" alt="Health Data Plot" class="visualization-image">
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery (required for tabs) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

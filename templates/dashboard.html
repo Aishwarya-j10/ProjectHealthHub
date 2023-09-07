@@ -1,126 +1,143 @@
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HealthHub</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for the dashboard */
+        .dashboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Dashboard</h1>
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for message in messages %}
-                    <div class="flash-message">
-                        {{ message }}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12 dashboard-container">
+                <h1 class="text-center">HealthHub Dashboard</h1>
+                <img src="{{ image_path }}" class="img-fluid rounded-circle mx-auto d-block" alt="Healthcare Image">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-danger mt-3">
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <!-- Tab Buttons -->
+                <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="profile" role="tab" aria-controls="profile" aria-selected="true">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="health-data-tab" data-toggle="tab" href="add_health_data" role="tab" aria-controls="add_health_data" aria-selected="false">Enter Health Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="view-data-tab" data-toggle="tab" href="view_data" role="tab" aria-controls="view_data" aria-selected="false">View Health Data</a>
+                    </li> 
+              
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="download_health_data_csv">Download Health Data (CSV)</a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#add_health_data">Enter Health Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="download_entire_health_data_csv">Download full Health Data (CSV)</a>
+                
+                </ul> 
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="visualization">View insights of your Health Data</a>
+                
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="myTabContent">
+                    <!-- Profile Tab Content -->
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <h2 class="mt-3">My Profile</h2>
+                        <p>User ID: {{ user.id }}</p>
+                        <p>Name: {{ user.name }}</p>
+                        <p>Email: {{ user.email }}</p>
+                        <p>Phone Number: {{ user.phone_number }}</p>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
                     </div>
-                {% endfor %}
+
+                    <!-- Health Data Tab Content -->
+                    <div class="tab-pane fade" id="#add_health_data" role="tabpanel" aria-labelledby="health-data-tab">
+                        <h2 class="mt-3">Enter Health Data</h2>
+                        <form method="POST" action="add_health_data">
+                            <div class="form-group">
+                                <label for="datetime">Date and Time:</label>
+                                <input type="datetime" class="form-control" id="datetime" name="datetime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" class="form-control" id="age" name="age" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <input type="text" class="form-control" id="gender" name="gender" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="heart_rate">Heart Rate:</label>
+                                <input type="number" class="form-control" id="heart_rate" name="heart_rate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="anxiety">Anxiety Level (1 to 10):</label>
+                                <input type="number" class="form-control" id="anxiety" name="anxiety" min="1" max="10" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Health Data</button>
+                        </form>
+                    </div>
+
+                    <!-- View Data Tab Content -->
+                    <div class="tab-pane fade" id="view_data" role="tabpanel" aria-labelledby="view-data-tab">
+                        <h2 class="mt-3">Health Data</h2>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Heart Rate</th>
+                                    <th>Anxiety Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in new_health_data %}
+                                    <tr>
+                                        <td>{{ data.datetime.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>{{ data.age }}</td>
+                                        <td>{{ data.gender }}</td>
+                                        <td>{{ data.heart_rate }}</td>
+                                        <td>{{ data.anxiety }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        {% endif %}
-    {% endwith %}
-    <!-- Tab Buttons -->
-    <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'profile')">My Profile</button>
-        <button class="tablinks" onclick="openTab(event, 'health_data')">Enter Health Data</button>
-        <button class="tablinks" onclick="openTab(event, 'view_data')">View Health Data</button>
-       
-            <!-- ... (your existing tabs) -->
-            <a href="{{ url_for('download_health_data_csv') }}" class="tablinks">Download Health Data (CSV)</a>
-            <a href="{{ url_for('download_entire_health_data_csv') }}" class="tablinks">Download full Health Data (CSV)</a>
-            
-        
-        
-
+        </div>
     </div>
-    
-    <!-- Profile Tab Content -->
-    <div id="profile" class="tabcontent">
-        <h2>My Profile</h2>
-        <p>User ID: {{ user.id }}</p>
-        <p>Name: {{ user.name }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>Phone Number: {{ user.phone_number }}</p>
-    </div> 
 
-    <!-- view_data Tab Content -->
-    <div id="view_data" class="tabcontent">
-        {% for data in health_data %}
-            <tr>
-                <!-- <td>{{ data.timestamp }}</td> -->
-                <td>{{ data.age }}</td>
-                <td>{{ data.gender }}</td>
-                <td>{{ "Yes" if data.fever else "No" }}</td>
-                <td>{{ data.heart_rate }}</td>
-                <td>{{ "Yes" if data.acidity else "No" }}</td>
-                <td>{{ "Yes" if data.vomiting else "No" }}</td>
-                <td>{{ "Yes" if data.headache else "No" }}</td>
-                <td>{{ "Yes" if data.breathlessness else "No" }}</td>
-                <td>{{ "Yes" if data.cough else "No" }}</td>
-                <td>{{ "Yes" if data.anxiety else "No" }}</td>
-                <!-- Add cells for other health data attributes -->
-            </tr>
-        {% endfor %}
-    </div>
-    
-    <!-- Health Data Tab Content -->
-    <div id="health_data" class="tabcontent">
-        <h2>Enter Health Data</h2>
-        <form method="POST" action="/add_health_data">
-            <label for="age">AGE:</label>
-            <input type="number" id="age" name="age"><br><br>
-
-            <label for="gender">Gender:</label>
-            <input type="text" id="gender" name="gender"><br><br>
-            
-            <label for="fever">Fever:</label>
-            <input type="checkbox" id="fever" name="fever"><br><br>
-            
-            <label for="heart_rate">Heart Rate:</label>
-            <input type="number" id="heart_rate" name="heart_rate"><br><br>
-
-            <label for="acidity">Acidity:</label>
-            <input type="checkbox" id="acidity" name="acidity"><br><br>
-
-            <label for="vomiting">Vomiting:</label>
-            <input type="checkbox" id="vomiting" name="vomiting"><br><br>
-
-            <label for="headache">Headache:</label>
-            <input type="checkbox" id="headache" name="headache"><br><br> 
-
-            <label for="breathlessness">Breathlessness:</label>
-            <input type="checkbox" id="breathlessness" name="breathlessness"><br><br> 
-
-            <label for="cough">Cough:</label>
-            <input type="checkbox" id="cough" name="cough"><br><br> 
-
-            <label for="anxiety">Anxiety:</label>
-            <input type="checkbox" id="anxiety" name="anxiety"><br><br>
-            
-            <!-- Add similar fields for other health data attributes -->
-            
-            <button type="submit">Submit Health Data</button>
-        </form>
-    </div>
-    
-    <!-- View Health Data Tab Content -->
-    <div id="view_data" class="tabcontent">
-        {% include 'view_data.html' %}
-    </div>
-    <!-- JavaScript for Tab Switching -->
-    <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-    </script>
-    
+    <!-- Include Bootstrap JS (optional) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

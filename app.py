@@ -7,7 +7,7 @@ from datetime import datetime
 from io import StringIO 
 import matplotlib.pyplot as plt 
 import seaborn as sns 
-
+import pytz 
 
 from sqlalchemy.sql import func
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -36,7 +36,7 @@ class HealthData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     age = db.Column(db.Integer)  
-    datetime = db.Column(db.DateTime, default=datetime.utcnow) 
+    datetime = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Asia/Kolkata'))) 
     gender = db.Column(db.String)
     heart_rate = db.Column(db.Integer)
     anxiety = db.Column(db.Integer) 
@@ -114,8 +114,14 @@ def add_health_data():
                 return render_template('enter_data.html')  
 
             elif request.method == 'POST':
-                datetime_str = request.form.get('datetime')
-                health_datetime = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
+                datetime_str = request.form.get('datetime') 
+                if datetime_str is not None and datetime_str != '':  
+                    health_datetime = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M') 
+                else : 
+                    health_datetime = None  
+                    # health_datetime = datetime.strptime(health_datetime, '%Y-%m-%dT%H:%M')  
+                   
+                # health_datetime = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
                 age = request.form.get('age')
                 gender = request.form.get('gender')
                 heart_rate = request.form.get('heart_rate')

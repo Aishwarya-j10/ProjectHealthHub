@@ -1,0 +1,54 @@
+<!--DOCTYPE html> 
+<html> 
+<head>
+   <title></title> 
+</head> 
+<body> 
+    <h1> prediction <p>User ID: {{ a }}</p></h1> 
+    {% if a == 0 %}
+        <p>Based on the input data, you do not have a high level of anxiety.</p>
+    {% else %}
+        <p>Based on the input data, you have a high level of anxiety.</p>
+    {% endif %}
+</body> 
+</html--> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction</h1>
+        <!--p>User ID: {{ a }}</p-->
+
+        <!-- Heart Rate Input Form -->
+        <form method="POST" action="/store_heart_rate">
+            <div class="form-group">
+                <label for="heartRate">Enter Heart Rate:</label>
+                <input type="number" class="form-control" id="heartRate" name="heart_rate" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Display Prediction Result -->
+        <h2>Prediction Result:</h2>
+        {% if a == 0 %}
+            <p class="text-success">Based on the input data, you do not have a high level of anxiety.</p> 
+        {% elif a == None %}
+            <p class="text-danger">Enter heart rate to predict level of anxiety.</p>
+        {% else %}
+            <p class="text-danger">Based on the input data, you have a high level of anxiety.</p>
+        {% endif %}
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

@@ -424,13 +424,13 @@ def model1() :
     # print(report) 
     return model11, scaler1 
 
-def prediction() : 
+def prediction(hear_rate) : 
     from sklearn.preprocessing import StandardScaler 
     # df1 = dframe() 
     model2, scaler1 = model1() 
     # Creating a DataFrame to hold the new data: 
     new_age = 21 
-    new_heart_rate = 90 
+    new_heart_rate = hear_rate 
     
     new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [new_heart_rate]})
     # scaler = StandardScaler()
@@ -444,37 +444,37 @@ def prediction() :
     predictions_binary = (predictions > 0.5).astype(int) 
     return predictions_binary 
 
-@app.route('/predicttion', methods=['GET']) 
-def pr() : 
-    # a = prediction() 
-    # df1 = dframe() 
-    model2, scaler1 = model1() 
-    # Creating a DataFrame to hold the new data: 
-    new_age = 21 
-    # new_heart_rate = app.heart_rate 
+# @app.route('/predicttion', methods=['GET']) 
+# def pr() : 
+#     a = prediction() 
+#     # df1 = dframe() 
+#     # model2, scaler1 = model1() 
+#     # Creating a DataFrame to hold the new data: 
+#     # new_age = 21 
+#     # new_heart_rate = app.heart_rate 
     
-    new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [app.heart_rate]})
-    # scaler = StandardScaler()
-    # Scaling the new data using the same scaler as used for training data
-    X_new = scaler1.transform(new_data)
+#     # new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [app.heart_rate]})
+#     # scaler = StandardScaler()
+#     # Scaling the new data using the same scaler as used for training data
+#     # X_new = scaler1.transform(new_data)
 
-    # Making predictions
-    predictions = model2.predict(X_new)
+#     # Making predictions
+#     # predictions = model2.predict(X_new)
 
-    # Converting the predictions to binary (0 or 1) based on a threshold (e.g., 0.5)
-    a = (predictions > 0.5).astype(int) 
+#     # Converting the predictions to binary (0 or 1) based on a threshold (e.g., 0.5)
+#     # a = (predictions > 0.5).astype(int) 
     
-    return render_template('prediction.html', a = a)
+#     return render_template('prediction.html', a = a)
 
 @app.route('/store_heart_rate', methods=['POST'])
 def store_heart_rate():
     heart_rate = float(request.form.get('heart_rate'))
+    a = prediction(heart_rate)
+   
+    # app.heart_rate = heart_rate
     
-    # Store the heart rate in a variable (you can save it to a database here)
-    # For demonstration purposes, we'll store it in a global variable.
-    app.heart_rate = heart_rate
-    
-    return redirect('/prediction')
+    return render_template('prediction.html', a=a)
+    # return redirect('/prediction')
 
 @app.route('/form', methods=['GET'])
 def show_form():

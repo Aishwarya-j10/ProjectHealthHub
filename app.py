@@ -15,6 +15,64 @@ from tensorflow import keras
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
+import joblib
+from disease_descriptions import disease_descriptions, feature_importances_data
+# Load the model from the file
+loaded_model = joblib.load('health_prediction_model.pkl') 
+# feature_importances_data = {'receiving_blood_transfusion': 0.012759,
+# 'red_sore_around_nose': 0.013223,
+# 'abnormal_menstruation': 0.025150,
+# 'continuous_sneezing': 0.013322,
+# 'breathlessness': 0.018282,
+# 'blackheads': 0.021460,
+# 'shivering': 0.011025,
+# 'dizziness': 0.015173,
+# 'back_pain': 0.015733,
+# 'unsteadiness': 0.011627,
+# 'yellow_crust_ooze': 0.013239,
+# 'muscle_weakness': 0.028525,
+# 'loss_of_balance': 0.014713,
+# 'chills': 0.024543,
+# 'ulcers_on_tongue': 0.015526,
+# 'stomach_bleeding': 0.011647,
+# 'lack_of_concentration': 0.015711,
+# 'coma': 0.013402,
+# 'neck_pain': 0.027405,
+# 'weakness_of_one_body_side': 0.008008,
+# 'diarrhoea': 0.018496,
+# 'receiving_unsterile_injections': 0.011771,
+# 'headache': 0.036250,
+# 'family_history': 0.012124,
+# 'fast_heart_rate': 0.020262,
+# 'pain_behind_the_eyes': 0.012951,
+# 'sweating': 0.029392,
+# 'mucoid_sputum': 0.014922,
+# 'spotting_ urination': 0.014582,
+# 'sunken_eyes': 0.008175,
+# 'dischromic _patches': 0.018705,
+# 'nausea': 0.032213,
+# 'dehydration': 0.009839,
+# 'loss_of_appetite': 0.023183,
+# 'abdominal_pain': 0.029517,
+# 'stomach_pain': 0.018175,
+# 'yellowish_skin': 0.024647,
+# 'altered_sensorium': 0.017180,
+# 'chest_pain': 0.029555,
+# 'muscle_wasting': 0.016734,
+# 'vomiting': 0.027799,
+# 'mild_fever': 0.022402,
+# 'high_fever': 0.029028,
+# 'red_spots_over_body': 0.013126,
+# 'dark_urine': 0.018927,
+# 'itching': 0.031445,
+# 'yellowing_of_eyes': 0.023203,
+# 'fatigue': 0.048896,
+# 'joint_pain': 0.036494,
+# 'muscle_pain': 0.025798
+# }
+
+# Create a list of the top 50 features
+top_50_features = list(feature_importances_data.keys())
 
 from sqlalchemy.sql import func
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -24,7 +82,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] =\
         'sqlite:///' + os.path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+static_folder = os.path.join(os.path.dirname(__file__), 'static')
 app.secret_key = 'not_A_secret'
 
 
@@ -53,7 +111,7 @@ class HealthData(db.Model):
 
 @app.route('/')
 def home():
-    return render_template('start.html')
+    return render_template('start.html') 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login(): 
@@ -67,7 +125,7 @@ def login():
             return redirect(url_for('dashboard')) 
         else:
             flash('Invalid email or password. Please try again.', 'danger')
-            return redirect(url_for('home')) 
+            return redirect(url_for('login')) 
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -105,8 +163,62 @@ def dashboard():
         
     
     flash('You need to log in to access the dashboard.', 'danger')
-    return redirect(url_for('home'))
+    return redirect(url_for('home')) 
 
+@app.route('/dashboard2')
+def dashboard2():
+    return render_template('dashboard2.html', features=top_50_features)
+
+# @app.route('/check_disease', methods=['GET', 'POST'])
+# def check_disease():
+#     if request.method == 'POST':
+#         selected_features = []
+        
+#         # Get the selected symptoms from the form
+#         for feature in top_50_features:
+#             if feature in request.form:
+#                 selected_features.append(1)
+#             else:
+#                 selected_features.append(0)
+        
+#         # Create a DataFrame with the selected features
+#         y_test = pd.DataFrame([selected_features], columns=top_50_features)
+        
+#         # Use your model to predict the disease class
+#         predicted_disease_class = loaded_model.predict(y_test)
+        
+#         # Return the predicted disease class to the user
+#         # return f'Predicted Disease Class: {predicted_disease_class[0]}' 
+#         return render_template('result.html', predicted_class=predicted_disease_class[0])
+    
+#     return render_template('check_disease.html', features=top_50_features) 
+
+
+
+@app.route('/check_disease', methods=['GET', 'POST'])
+def check_disease():
+    predicted_disease_class = None  # Initialize as None
+    description = None 
+    
+    if request.method == 'POST':
+        selected_features = []
+        print("see:", selected_features)
+        # Get the selected symptoms from the form
+        for feature in top_50_features:
+            if feature in request.form:
+                selected_features.append(1)
+            else:
+                selected_features.append(0)
+        
+        # Create a DataFrame with the selected features
+        y_test = pd.DataFrame([selected_features], columns=top_50_features)
+        
+        # Use your model to predict the disease class
+        predicted_disease_class = loaded_model.predict(y_test) 
+        predicted_disease_class_str = predicted_disease_class[0]
+        description = disease_descriptions.get(predicted_disease_class_str, 'Description not available.')
+        
+    return render_template('result.html', predicted_class=predicted_disease_class, description = description)  
 
 
 @app.route('/add_health_data', methods=['GET', 'POST'])
@@ -314,7 +426,8 @@ def visualizations():
                 plt.ylabel('Heart Rate')
                 plt.grid(True)
                 plt.xticks(rotation=45)
-                plt.tight_layout()   
+                plt.tight_layout() 
+                # image_path = os.path.join(static_folder, 'plot.png')  
                 image_path = "static/plot.png"
                 plt.savefig(image_path)
     
@@ -325,14 +438,16 @@ def visualizations():
                 plt.xlabel('Anxiety Level')
                 plt.ylabel('Frequency')
                 plt.tight_layout()   
-                image_path1 = "static/plot1.png"
+                #                 image_path1 = os.path.join(static_folder, 'plot1.png')
+                image_path1 = "static/plot1.png"  
                 plt.savefig(image_path1) 
                 # Create a pie chart
                 category_counts = df1['Heart Rate'].value_counts()
                 plt.figure(figsize=(5, 5))
                 plt.pie(category_counts, labels=category_counts.index, autopct='%1.1f%%', startangle=140)
                 plt.title('Heart Rate Categories')
-                plt.axis('equal')  
+                plt.axis('equal') 
+                #                 image_path2 = os.path.join(static_folder, 'plot2.png') 
                 image_path2 = "static/plot2.png"
                 plt.savefig(image_path2) 
                 selected_columns = ['Heart Rate', 'Anxiety Level'] 
@@ -346,6 +461,7 @@ def visualizations():
      
                 plt.tight_layout() 
                 # plt.show()  
+                #                 image_path3 = os.path.join(static_folder, 'plot3.png') 
                 image_path3 = "static/plot3.png"
                 plt.savefig(image_path3)
                 return (image_path, image_path1, image_path2, image_path3)  
@@ -424,13 +540,13 @@ def model1() :
     # print(report) 
     return model11, scaler1 
 
-def prediction() : 
+def prediction(hear_rate) : 
     from sklearn.preprocessing import StandardScaler 
     # df1 = dframe() 
     model2, scaler1 = model1() 
     # Creating a DataFrame to hold the new data: 
     new_age = 21 
-    new_heart_rate = 90 
+    new_heart_rate = hear_rate 
     
     new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [new_heart_rate]})
     # scaler = StandardScaler()
@@ -444,37 +560,37 @@ def prediction() :
     predictions_binary = (predictions > 0.5).astype(int) 
     return predictions_binary 
 
-@app.route('/predicttion', methods=['GET']) 
-def pr() : 
-    # a = prediction() 
-    # df1 = dframe() 
-    model2, scaler1 = model1() 
-    # Creating a DataFrame to hold the new data: 
-    new_age = 21 
-    # new_heart_rate = app.heart_rate 
+# @app.route('/predicttion', methods=['GET']) 
+# def pr() : 
+#     a = prediction() 
+#     # df1 = dframe() 
+#     # model2, scaler1 = model1() 
+#     # Creating a DataFrame to hold the new data: 
+#     # new_age = 21 
+#     # new_heart_rate = app.heart_rate 
     
-    new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [app.heart_rate]})
-    # scaler = StandardScaler()
-    # Scaling the new data using the same scaler as used for training data
-    X_new = scaler1.transform(new_data)
+#     # new_data = pd.DataFrame({'Age': [new_age], 'Heart Rate': [app.heart_rate]})
+#     # scaler = StandardScaler()
+#     # Scaling the new data using the same scaler as used for training data
+#     # X_new = scaler1.transform(new_data)
 
-    # Making predictions
-    predictions = model2.predict(X_new)
+#     # Making predictions
+#     # predictions = model2.predict(X_new)
 
-    # Converting the predictions to binary (0 or 1) based on a threshold (e.g., 0.5)
-    a = (predictions > 0.5).astype(int) 
+#     # Converting the predictions to binary (0 or 1) based on a threshold (e.g., 0.5)
+#     # a = (predictions > 0.5).astype(int) 
     
-    return render_template('prediction.html', a = a)
+#     return render_template('prediction.html', a = a)
 
 @app.route('/store_heart_rate', methods=['POST'])
 def store_heart_rate():
     heart_rate = float(request.form.get('heart_rate'))
+    a = prediction(heart_rate)
+   
+    # app.heart_rate = heart_rate
     
-    # Store the heart rate in a variable (you can save it to a database here)
-    # For demonstration purposes, we'll store it in a global variable.
-    app.heart_rate = heart_rate
-    
-    return redirect('/prediction')
+    return render_template('prediction.html', a=a)
+    # return redirect('/prediction')
 
 @app.route('/form', methods=['GET'])
 def show_form():

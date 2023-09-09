@@ -17,7 +17,7 @@ HealthHub is a comprehensive web-based platform that empowers users to manage th
 
 To run HealthHub locally, follow these steps:
 
-1. Clone this repository: `git clone https://github.com/Aishwarya-j10/healthhub.git`
+1. Clone this repository: `git clone https://github.com/Aishwarya-j10/ProjectHealthHub.git`
 2. Install required dependencies: `pip install -r requirements.txt`
 3. Configure your environment variables.
 4. Run the application: `python app.py`

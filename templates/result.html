@@ -1,0 +1,32 @@
+<!--!DOCTYPE html>
+<html>
+<head>
+    <title>Predicted Disease Result</title>
+</head>
+<body>
+    <h1>Predicted Disease Result</h1>
+    <p>Predicted Disease Class: {{ predicted_class }}</p>
+</body>
+</html>
+<!DOCTYPE html>
+<html-->
+<head>
+    <title>Predicted Disease Result</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="display-4">Predicted Disease Result</h1>
+        <div class="jumbotron">
+            <p class="lead">Predicted Disease Class: <span class="badge badge-primary">{{ predicted_class }}</span></p>
+            <p>Description: {{ description }}</p>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery scripts (if needed) here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

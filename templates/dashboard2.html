@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Disease Dashboard</title>
+        <!-- Include Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+       
+        <style>
+            
+            body {
+                /* background-image: url('path/to/your/background-image.jpg'); */
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+               
+            }
+            .navbar {
+                background-color: #5C62D6; 
+            } 
+            <style>
+                /* Custom CSS for the dashboard */
+                .dashboard-container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    background-color: #fff;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+            </style>
+        </style>
+    </head>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Health Hub</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!--li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <!--li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a> 
+                    </li-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a> 
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+     
+    
+</head>
+<body>
+    <h1>Disease Dashboard</h1>
+    <p>Select your symptoms:</p>
+    <form action="/check_disease" method="POST">
+        {% for feature in features %}
+            <label>
+                <input type="checkbox" name="{{ feature }}" value="{{ feature }}"> {{ feature }}
+            </label><br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Check Disease">
+    </form>
+</body>
+</html> 
+<!--!DOCTYPE html>
+<html>
+<head>
+    <title>Disease Dashboard</title>
+    <!-- Add Bootstrap CSS link here -->
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for selected buttons */
+        .selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="display-4">Disease Dashboard</h1>
+        <p>Select your symptoms:</p>
+        <form action="/check_disease" method="POST"> <!-- Changed method to POST -->
+            <!--div class="row">
+                {% for feature in features %}
+                    <div class="col-2 mb-2">
+                        <label>
+                            <input type="checkbox" name="{{ feature }}" value="{{ feature }}"> {{ feature }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Check Disease"> <!-- Changed type to "submit" -->
+        <!--/form>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery scripts (if needed) here -->
+    <!--script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html--> 
